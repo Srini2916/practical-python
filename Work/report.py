@@ -42,14 +42,13 @@ def read_portfolio_with_csv_And_dict(filename):
 
 def read_prices(filename2):
     prices_dict = {}
-    with open(filename2,'rt') as f:
+    with open(filename2) as f:
         rows = csv.reader(f)
-        try:
-            for row in rows:
-                "if(row.__len__> 0):"
+        for row in rows:
+            try:
                 prices_dict[row[0]] = float(row[1])
-        except ( IndexError):
-            return 'Error occured!!!'
+            except  IndexError:
+                pass
     return prices_dict
 
 filename2 = 'Data/prices.csv'
@@ -76,10 +75,17 @@ print('Using dictionary :')
 pprint(portfolio_list)
 print(portfolio_list[0])
 print(portfolio_list[0]['shares'])
-total = 0.0
+costValueTotal = 0.0
 for s in portfolio_list:
-    total += s['shares'] * s['price']
-print("Total ::",total)
+    costValueTotal += s['shares'] * s['price']
+print("Total Cost value::",costValueTotal)
 
-print("Prices csv as dict:",read_prices('Data/prices.csv'))
+priceList = read_prices('Data/prices.csv')
+print("Prices csv as dict:",priceList)
+total_value = 0.0
 
+for s in portfolio_list:
+    total_value += s['shares'] * priceList[s['name']]
+
+print("Total Current Value :",total_value)
+print("Total gain/loss :",total_value - costValueTotal)
