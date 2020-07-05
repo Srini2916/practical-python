@@ -24,5 +24,7 @@ while principal > 0:
 print('Total paid', round(total_paid, 2))
 print('Months', month)
 
+print(f'Total paid is {round(total_paid,3)} in Months {month}')
+
 
 
