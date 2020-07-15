@@ -57,12 +57,28 @@ if(sys.argv) == 2:
 else:
     filename = 'Data/portfolio.csv'
 
-print('Using List split() and Iteration :')
-pprint(read_portfolio(filename))
+def make_report(portfolio, prices):
+   
+    report_tuple_list = []
+
+    for stockitem in portfolio:
+        currentprice = prices[stockitem["name"]] 
+        profitLoss = currentprice - stockitem["price"]
+        listItem = (stockitem["name"],stockitem["shares"], currentprice, profitLoss)
+        report_tuple_list.append(listItem)
+    return report_tuple_list  
+        
+
+
+##########################################################
+
+
+#print('Using List split() and Iteration :')
+#pprint(read_portfolio('Data/portfolio.csv'))
 
 tupleList = read_portfolio_with_csv(filename)
-print(tupleList[0])
-print(tupleList[0][1])
+#print(tupleList[0])
+#print(tupleList[0][1])
 total = 0.0
 for name, shares, price in tupleList:
     total += shares * price
@@ -71,10 +87,10 @@ print('Using csv reader :')
 pprint(tupleList)
 
 portfolio_list = read_portfolio_with_csv_And_dict(filename)
-print('Using dictionary :')
+#print('Using dictionary :')
 pprint(portfolio_list)
-print(portfolio_list[0])
-print(portfolio_list[0]['shares'])
+#print(portfolio_list[0])
+#print(portfolio_list[0]['shares'])
 costValueTotal = 0.0
 for s in portfolio_list:
     costValueTotal += s['shares'] * s['price']
@@ -87,5 +103,22 @@ total_value = 0.0
 for s in portfolio_list:
     total_value += s['shares'] * priceList[s['name']]
 
+report = make_report(portfolio_list, priceList)
+headers = ('Name', 'Shares', 'Price', 'Change')
+formatted_float = "${%10.2f}"
+print('%10s %10s %10s %10s' % headers)
+print(('-' * 10 + ' ') * len(headers))
+for r in report:
+    print('%10s %10d %10.2f %10.2f' % r)
+
+print('%10s %10s %10s %10s' %headers)
+print(('-' * 10 + ' ') * len(headers))
+for name, shares, price, change in report:
+        print(f'{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}')
+
+
+
 print("Total Current Value :",total_value)
 print("Total gain/loss :",total_value - costValueTotal)
+
+
